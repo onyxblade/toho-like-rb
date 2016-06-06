@@ -1,5 +1,7 @@
 class BattleScene
 
+  attr_accessor :battle_area
+  
   class << self
     attr_accessor :instance
   end

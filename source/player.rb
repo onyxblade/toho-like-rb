@@ -4,7 +4,7 @@ class Player
   attr_accessor :pos
 
   NORMAL_SPEED = 5
-  SLOW_SPEED = 2
+  SLOW_SPEED = 3
   ANIMATE_SPEED = 4
   STATE = [:moving_left, :moving_right, :normal, :slow]
 
@@ -59,17 +59,20 @@ class Player
 
     @animation = @normal
 
+    @bullet_factories = [ReimuMainBulletFactory.new(3){ @position }]
+
   end
 
   def update
     update_speed
     process_move
+    @bullet_factories.map &:update
     process_fire
   end
 
   def draw
     image = @animation.next
-    image.draw(*@position, 0)
+    image.draw(*canvas_position, 0)
   end
 
   def move pos
@@ -119,24 +122,33 @@ class Player
   end
 
   def force_in_area area
-    if @position[0] < area[0][0]
+    if canvas_position[0] < area[0][0]
       x = area[0][0]
     end
-    if @position[1] < area[0][1]
+    if canvas_position[1] < area[0][1]
       y = area[0][1]
     end
-    if @position[0] + @width > area[1][0]
+    if canvas_position[0] + @width > area[1][0]
       x = area[1][0] - @width
     end
-    if @position[1] + @height > area[1][1]
+    if canvas_position[1] + @height > area[1][1]
       y = area[1][1] - @height
     end
-    @position = Vector[x || @position[0], y || @position[1]]
+    cpos = Vector[x || canvas_position[0], y || canvas_position[1]]
+    @position = calc_actual_position cpos
   end
 
   def process_fire
     if Gosu::button_down? Gosu::KbZ
-      battle_scene.add_bullet Bullet.new(@position, Vector[0, -30])
+      @bullet_factories.map &:process_fire
     end
+  end
+
+  def canvas_position
+    Vector[@position[0] - @width / 2, @position[1] - @height / 2]
+  end
+
+  def calc_actual_position canvas_position
+    Vector[canvas_position[0] + @width / 2, canvas_position[1] + @height / 2]
   end
 end
