@@ -17,4 +17,7 @@ class BulletFactory
     end
   end
 
+  def draw
+  end
+
 end

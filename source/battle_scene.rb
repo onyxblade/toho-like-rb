@@ -10,7 +10,7 @@ class BattleScene
     @bullets = []
     @battle_area = [Vector[0,0], Vector[550,600]]
     @score_area = [Vector[550,0], Vector[800,600]]
-    @player = Player.new 'reimu', @battle_area
+    @player = ReimuPlayer.new @battle_area
   end
 
   def update

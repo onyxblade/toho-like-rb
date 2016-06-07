@@ -3,17 +3,15 @@ class Player
 
   attr_accessor :pos
 
-  NORMAL_SPEED = 5
-  SLOW_SPEED = 3
   ANIMATE_SPEED = 4
   STATE = [:moving_left, :moving_right, :normal, :slow]
 
-  def initialize(character, moveable_area)
-    @moveable_area = moveable_area
+  def initialize character, battle_area
+    @moveable_area = battle_area
     @position = Vector[0, 0]
     @height = 48
     @width = 32
-    @speed = NORMAL_SPEED
+    @speed = @normal_speed
     @normal = Animation.new do
       images = 8.times.map do |i|
         Gosu::Image.new("image/#{character}.png", rect: [32*i, 0, 32, 48])
@@ -59,8 +57,6 @@ class Player
 
     @animation = @normal
 
-    @bullet_factories = [ReimuMainBulletFactory.new(3){ @position }]
-
   end
 
   def update
@@ -73,6 +69,7 @@ class Player
   def draw
     image = @animation.next
     image.draw(*canvas_position, 0)
+    @bullet_factories.map &:draw
   end
 
   def move pos
@@ -115,9 +112,9 @@ class Player
 
   def update_speed
     if Gosu::button_down? Gosu::KbLeftShift
-      @speed = SLOW_SPEED
+      @speed = @slow_speed
     else
-      @speed = NORMAL_SPEED
+      @speed = @normal_speed
     end
   end
 
