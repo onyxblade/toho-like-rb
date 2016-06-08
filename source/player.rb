@@ -8,7 +8,7 @@ class Player
 
   def initialize character, battle_area
     @moveable_area = battle_area
-    @position = Vector[0, 0]
+    @position = Vector[270, 576]
     @height = 48
     @width = 32
     @speed = @normal_speed
@@ -30,7 +30,7 @@ class Player
       images = 8.times.map do |i|
         Gosu::Image.new("image/#{character}.png", rect: [32*i, 48, 32, 48])
       end
-      
+
       lambda do |enum|
         loop{
           images.last(4).each do |i|
@@ -45,7 +45,7 @@ class Player
       images = 8.times.map do |i|
         Gosu::Image.new("image/#{character}.png", rect: [32*i, 96, 32, 48])
       end
-      
+
       lambda do |enum|
         loop {
           images.last(4).each do |i|
@@ -75,7 +75,7 @@ class Player
   def move pos
     pos = Vector[*pos].normalize * @speed
     @position += pos
-    
+
     force_in_area @moveable_area
   end
 

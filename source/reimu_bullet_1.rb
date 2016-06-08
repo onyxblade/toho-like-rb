@@ -1,7 +1,11 @@
 class ReimuBullet1 < Bullet
+  class << self
+    attr_accessor :image
+  end
+
   def initialize position, velocity
     super()
-    @@image ||= Gosu::Image.new("image/pl_shot.png", rect: [34, 129, 13, 50])
+    self.class.image ||= Gosu::Image.new("image/pl_shot.png", rect: [34, 129, 13, 50])
     @width = 13
     @height = 50
     @position = position
@@ -11,7 +15,7 @@ class ReimuBullet1 < Bullet
   end
 
   def draw
-    @@image.draw *canvas_position, 0, 1, 1, 0x99ffffff
+    self.class.image.draw *canvas_position, 0, 1, 1, 0x99ffffff
   end
 
   def canvas_position
