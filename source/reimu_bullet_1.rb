@@ -1,4 +1,6 @@
 class ReimuBullet1 < Bullet
+  include Helpers
+
   class << self
     attr_accessor :image
   end
@@ -15,10 +17,15 @@ class ReimuBullet1 < Bullet
   end
 
   def draw
+    draw_indicator *@position
     self.class.image.draw *canvas_position, 0, 1, 1, 0x99ffffff
   end
 
   def canvas_position
-    Vector[@position[0] - @width / 2, @position[1] - @height / 2]
+    Vector[@position[0] - @width / 2, @position[1]]
+  end
+
+  def hit? center, r
+    (center[0] - @position[0]) ** 2 + (center[1] - @position[1]) ** 2 < r ** 2
   end
 end

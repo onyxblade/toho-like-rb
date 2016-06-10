@@ -11,6 +11,8 @@ end
 
 Dir.glob('source/*.rb').each{ |x| require_relative x }
 
+include Helpers
+
 class GameWindow < Gosu::Window
   include Helpers
 

@@ -1,6 +1,6 @@
 class Bullet
   include Helpers
-
+  attr_accessor :position, :alive, :demage
   def initialize
     @alive = true
   end

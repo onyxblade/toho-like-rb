@@ -67,6 +67,7 @@ class Player
   end
 
   def draw
+    draw_indicator *@position
     image = @animation.next
     image.draw(*canvas_position, 0)
     @bullet_factories.map &:draw

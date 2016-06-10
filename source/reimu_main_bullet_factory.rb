@@ -8,21 +8,29 @@ class ReimuMainBulletFactory < BulletFactory
   end
 
   def create_bullet
+    position = @position_proc.call
+    position = Vector[position[0], position[1]-5]
     case @level
     when 1
-      [ReimuBullet1.new(@position_proc.call, @velocity)]
+      [ReimuBullet1.new(position, @velocity)]
     when 2
+      seperation = @slow ? 0.35 : 1
       [
-        ReimuBullet1.new(@position_proc.call, Vector[-1, -25].normalize * @speed),
-        ReimuBullet1.new(@position_proc.call, Vector[1, -25].normalize * @speed)
+        ReimuBullet1.new(Vector[position[0]-3, position[1]], Vector[-seperation, -25].normalize * @speed),
+        ReimuBullet1.new(Vector[position[0]+3, position[1]], Vector[seperation, -25].normalize * @speed)
       ]
     when 3
+      seperation = @slow ? 0.7 : 2
       [
-        ReimuBullet1.new(@position_proc.call, Vector[-1.5, -25].normalize * @speed),
-        ReimuBullet1.new(@position_proc.call, Vector[1.5, -25].normalize * @speed),
-        ReimuBullet1.new(@position_proc.call, Vector[0, -25].normalize * @speed)
+        ReimuBullet1.new(Vector[position[0]-3, position[1]], Vector[-seperation, -25].normalize * @speed),
+        ReimuBullet1.new(Vector[position[0]+3, position[1]],Vector[seperation, -25].normalize * @speed),
+        ReimuBullet1.new(position, Vector[0, -25].normalize * @speed)
       ]
     end
   end
 
+  def update
+    super
+    @slow = Gosu::button_down? Gosu::KbLeftShift
+  end
 end
