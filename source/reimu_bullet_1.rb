@@ -1,5 +1,4 @@
 class ReimuBullet1 < Bullet
-  include Helpers
 
   class << self
     attr_accessor :image
@@ -14,6 +13,7 @@ class ReimuBullet1 < Bullet
     @velocity = velocity
     @speed = 25
     @demage = 10
+    @dead_distance = [@height, @width].max
   end
 
   def draw
@@ -27,5 +27,20 @@ class ReimuBullet1 < Bullet
 
   def hit? center, r
     (center[0] - @position[0]) ** 2 + (center[1] - @position[1]) ** 2 < r ** 2
+  end
+
+  def in_area?
+    out =
+      battle_area.x1 - @position.x > @dead_distance ||
+      battle_area.x2 - @position.x < @dead_distance ||
+      battle_area.y1 - @position.y > @dead_distance ||
+      battle_area.y2 - @position.y < @dead_distance
+    !out
+  end
+
+  def update_alive
+    if !in_area?
+      @alive = false
+    end
   end
 end
