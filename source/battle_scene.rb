@@ -1,7 +1,7 @@
 class BattleScene
 
   attr_accessor :battle_area, :score_area, :player_bullets, :enemies, :enemy_bullets, :effects, :items
-  
+
   class << self
     attr_accessor :instance
   end
@@ -19,6 +19,8 @@ class BattleScene
     @enemies << Yousei4.new
 
     @font = Gosu::Font.new(20)
+
+    @player_bullets << ReimuBullet2.new(@battle_area.relative(50,30))
   end
 
   def update
@@ -32,6 +34,8 @@ class BattleScene
     @effects.select! &:alive?
     @items.map &:update
     @items.map &:alive?
+
+    p @player_bullets.select{|x| x.is_a? ReimuBullet2}
 
   end
 

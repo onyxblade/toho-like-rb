@@ -10,9 +10,11 @@ class ReimuAssistBulletFactory < BulletFactory
     @rotation_b = 90
     @interval = 1
     @sita = 180
+    @interval = 10
   end
 
   def update
+    super
     @rotation_a += 5
     @rotation_b -= 5
     if Gosu::button_down? Gosu::KbLeftShift
@@ -47,6 +49,10 @@ class ReimuAssistBulletFactory < BulletFactory
   end
 
   def create_bullet
-    []
+    position = @position_proc.call
+    [
+      ReimuBullet2.new(Vector[position[0]-3, position[1]]),
+      ReimuBullet2.new(Vector[position[0]+3, position[1]])
+    ]
   end
 end

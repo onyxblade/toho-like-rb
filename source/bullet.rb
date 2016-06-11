@@ -34,4 +34,8 @@ class Bullet
   def update_alive
 
   end
+
+  def calc_direction
+    Gosu.angle(0, 0, *@velocity)
+  end
 end

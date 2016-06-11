@@ -19,11 +19,11 @@ class Yousei3 < Enemy
 
     @width = 48
     @height = 39
-    
+
   end
 
   def update
-    
+
   end
 
   def draw

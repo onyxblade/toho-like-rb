@@ -18,7 +18,7 @@ class ReimuBullet1 < Bullet
 
   def draw
     draw_indicator *@position
-    self.class.image.draw *canvas_position, 0, 1, 1, 0x99ffffff
+    self.class.image.draw_rot *@position, 0, calc_direction, 0.5, 0.0, 1, 1, 0x99ffffff
   end
 
   def canvas_position
