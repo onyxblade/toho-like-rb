@@ -9,11 +9,24 @@ class ReimuBullet1 < Bullet
     self.class.image ||= Gosu::Image.new("image/pl_shot.png", rect: [34, 129, 13, 50])
     @width = 13
     @height = 50
-    @position = position
-    @velocity = velocity
-    @speed = 25
-    @demage = 10
     @dead_distance = [@height, @width].max
+
+    @attr_enum = Enumerator.new do |enum|
+      enum.yield(
+        position: position,
+        velocity: velocity,
+        speed: 25,
+        demage: 10,
+      )
+
+      loop{ enum.yield }
+    end
+    @attr_enum.next.each{|key, value| instance_variable_set("@#{key}", value)}
+  end
+
+  def update
+    super
+    @attr_enum.next&.each{|key, value| instance_variable_set("@#{key}", value)}
   end
 
   def draw

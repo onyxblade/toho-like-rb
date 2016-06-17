@@ -47,7 +47,7 @@ class BattleScene
     @effects.map &:draw
     @items.map &:draw
     @font.draw("Bullets: #{@player_bullets.count + @enemy_bullets.count}", *@score_area.relative(10, 10), 1, 1.0, 1.0, 0xff_ffffff)
-    @font.draw("FPS: #{Gosu.fps}", *@score_area.relative(10, 20), 1, 1.0, 1.0, 0xff_ffffff)
+    @font.draw("FPS: #{Gosu.fps}", *@score_area.relative(10, 30), 1, 1.0, 1.0, 0xff_ffffff)
   end
 
   def add_bullet bullet, from

@@ -14,6 +14,7 @@ class ReimuBullet2 < Bullet
     @speed = 15
     @velocity = Vector[0, -1]
     @demage = 25
+    @acceleration = 0
   end
 
   def draw

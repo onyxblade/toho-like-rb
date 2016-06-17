@@ -5,6 +5,8 @@ class ReimuMainBulletFactory < BulletFactory
     @interval = 3
     @velocity = Vector[0, -25]
     @speed = 25
+
+    set_level_detail
   end
 
   def create_bullet
@@ -26,6 +28,17 @@ class ReimuMainBulletFactory < BulletFactory
         ReimuBullet1.new(Vector[position[0]+3, position[1]],Vector[seperation, -25].normalize * @speed),
         ReimuBullet1.new(position, Vector[0, -25].normalize * @speed)
       ]
+    end
+  end
+
+  def set_level_detail
+    case @level
+    when 1
+
+    when 2
+
+    when 3
+
     end
   end
 
