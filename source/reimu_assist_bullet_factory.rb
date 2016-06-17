@@ -10,7 +10,7 @@ class ReimuAssistBulletFactory < BulletFactory
     @rotation_b = 90
     @interval = 1
     @sita = 180
-    @interval = 10
+    @interval = 30
   end
 
   def update

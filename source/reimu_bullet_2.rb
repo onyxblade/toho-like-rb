@@ -11,7 +11,7 @@ class ReimuBullet2 < Bullet
     self.class.image ||= Gosu::Image.new("image/pl_shot.png", rect: [18, 242, 12, 13])
     @position = position
     @target = Vector[300,300]
-    @speed = 25
+    @speed = 15
     @velocity = Vector[0, -1]
     @demage = 25
   end
@@ -30,7 +30,7 @@ class ReimuBullet2 < Bullet
   end
 
   def update_velocity
-    rotate_velocity = (@target - @position).normalize * 0.2
+    rotate_velocity = (@target - @position).normalize * 1
     @velocity = (@velocity.normalize + rotate_velocity) * @speed
   end
 end
