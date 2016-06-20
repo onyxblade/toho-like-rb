@@ -7,11 +7,15 @@ class Player
   STATE = [:moving_left, :moving_right, :normal, :slow]
 
   def initialize character, battle_area
+    initialize_sprite character
+
     @moveable_area = battle_area
     @position = Vector[270, 576]
-    @height = 48
-    @width = 32
     @speed = @normal_speed
+
+  end
+
+  def initialize_sprite character
     @normal = Animation.new do
       images = 8.times.map do |i|
         Gosu::Image.new("image/#{character}.png", rect: [32*i, 0, 32, 48])
@@ -56,7 +60,8 @@ class Player
     end
 
     @animation = @normal
-
+    @height = 48
+    @width = 32
   end
 
   def update

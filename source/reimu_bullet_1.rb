@@ -38,6 +38,10 @@ class ReimuBullet1 < Bullet
     Vector[@position[0] - @width / 2, @position[1]]
   end
 
+  def collision_body
+    [@position, 0]
+  end
+
   def hit? center, r
     (center[0] - @position[0]) ** 2 + (center[1] - @position[1]) ** 2 < r ** 2
   end

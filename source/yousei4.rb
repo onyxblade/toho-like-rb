@@ -5,7 +5,27 @@ class Yousei4 < Enemy
 
   ANIMATE_SPEED = 8
 
-  def initialize
+  def initialize position
+    super()
+    initialize_sprite
+
+    @attr_enum = Enumerator.new do |enum|
+      enum.yield(
+        position: position,
+        velocity: Vector[0, -1],
+        speed: 25
+      )
+
+      loop{ enum.yield }
+    end
+    @attr_enum.next.each{|key, value| instance_variable_set("@#{key}", value)}
+
+    @position = position
+    @r = @width / 2
+    @hp = 100
+  end
+
+  def initialize_sprite
     self.class.images ||= 3.times.map do |i|
       Gosu::Image.new("image/enemy.png", rect: [64*i, 230, 64, 49])
     end
@@ -16,21 +36,17 @@ class Yousei4 < Enemy
         end
       }
     end
-    @position = Vector[300,300]
     @width = 64
     @height = 49
-    @r = @width / 2
-    @hp = 100000
+  end
+
+  def collision_body
+    [@position, @r]
   end
 
   def update
-    battle_scene.player_bullets.each do |x|
-      if x.alive? && x.hit?(@position, @r)
-        x.alive = false
-        @hp -= x.demage
-        p @hp
-      end
-    end
+    @attr_enum.next&.each{|key, value| instance_variable_set("@#{key}", value)}
+    @position += @velocity
   end
 
   def canvas_position

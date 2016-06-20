@@ -26,9 +26,9 @@ class GameWindow < Gosu::Window
     super 800, 600, false
     self.caption = 'Touhou like game'
 
-    #BattleScene.instance = BattleScene.new
-    #@scene = BattleScene.instance
-    @scene = CharacterSelectScene.new
+    BattleScene.instance = BattleScene.new
+    @scene = BattleScene.instance
+    #@scene = CharacterSelectScene.new
   end
 
   def update

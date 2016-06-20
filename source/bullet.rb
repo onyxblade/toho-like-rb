@@ -19,10 +19,6 @@ class Bullet
     @alive
   end
 
-  def canvas_position
-
-  end
-
   def update_velocity
 
   end
@@ -37,5 +33,9 @@ class Bullet
 
   def calc_direction
     Gosu.angle(0, 0, *@velocity)
+  end
+
+  def hitted _
+    @alive = false
   end
 end

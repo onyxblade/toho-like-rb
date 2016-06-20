@@ -10,6 +10,20 @@ module Helpers
   def draw_indicator x, y
     Gosu.draw_rect(x, y, 5, 5, Gosu::Color::BLUE, 99)
   end
+
+  # cb: [位置, 碰撞半径]
+  def collision? cb1, cb2
+    (cb1[0] - cb2[0]).r < cb1[1] + cb2[1]
+  end
+
+  def graze? cb1, cb2, radius
+    (cb1[0] - cb2[0]).r < cb1[1] + cb2[1] + radius
+  end
+
+  def wait_in_enum second, enum
+    frames = (second * 60).to_i
+    frames.times{ enum.yield nil }
+  end
 end
 
 module Math

@@ -6,6 +6,13 @@ class Yousei2 < Enemy
   ANIMATE_SPEED = 8
 
   def initialize
+    super()
+    initialize_sprite
+
+    @hp = 20
+  end
+
+  def initialize_sprite
     self.class.images ||= 3.times.map do |i|
       Gosu::Image.new("image/enemy.png", rect: [48*i, 38, 48, 35])
     end
@@ -16,10 +23,12 @@ class Yousei2 < Enemy
         end
       }
     end
+    @width = 48
+    @height = 35
   end
 
   def update
-    
+
   end
 
   def draw
