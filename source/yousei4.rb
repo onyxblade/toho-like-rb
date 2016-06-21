@@ -9,7 +9,7 @@ class Yousei4 < Enemy
     super()
     initialize_sprite
 
-    @attr_enum = Enumerator.new do |enum|
+    @behavior = Enumerator.new do |enum|
       enum.yield(
         position: position,
         velocity: Vector[0, -1],
@@ -18,7 +18,7 @@ class Yousei4 < Enemy
 
       loop{ enum.yield }
     end
-    @attr_enum.next.each{|key, value| instance_variable_set("@#{key}", value)}
+    @behavior.next.each{|key, value| instance_variable_set("@#{key}", value)}
 
     @position = position
     @r = @width / 2
@@ -45,7 +45,7 @@ class Yousei4 < Enemy
   end
 
   def update
-    @attr_enum.next&.each{|key, value| instance_variable_set("@#{key}", value)}
+    super
     @position += @velocity
   end
 

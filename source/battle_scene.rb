@@ -6,7 +6,7 @@ class BattleScene
     attr_accessor :instance
   end
 
-  def initialize
+  def initialize character
     @player_bullets = []
     @enemy_bullets = []
     @enemies = []
@@ -15,7 +15,14 @@ class BattleScene
 
     @battle_area = Rect[[0,0], [550,600]]
     @score_area = Rect[[550,0], [800,600]]
-    @player = ReimuPlayer.new @battle_area
+
+    case character
+    when 'reimu'
+      @player = ReimuPlayer.new @battle_area
+    when 'marisa'
+      @player = MarisaPlayer.new @battle_area
+    end
+
     @enemies << Yousei4.new(Vector[300,300])
     @enemies << Yousei4.new(Vector[500,300])
 
@@ -28,16 +35,16 @@ class BattleScene
 
     process_collisions
 
-    @player_bullets.map &:update
     @player_bullets.select! &:alive?
-    @enemies.map &:update
+    @player_bullets.map &:update
     @enemies.select! &:alive?
-    @enemy_bullets.map &:update
+    @enemies.map &:update
     @enemy_bullets.select! &:alive?
-    @effects.map &:update
+    @enemy_bullets.map &:update
     @effects.select! &:alive?
-    @items.map &:update
+    @effects.map &:update
     @items.map &:alive?
+    @items.map &:update
 
   end
 
@@ -57,7 +64,7 @@ class BattleScene
   def process_collisions
     @player_bullets.each do |bullet|
       @enemies.each do |enemy|
-        if collision?(enemy.collision_body, bullet.collision_body) && enemy.alive? && bullet.alive?
+        if enemy.alive? && bullet.alive? && collision?(enemy.collision_body, bullet.collision_body)
           enemy.hitted_by bullet
           bullet.hitted enemy
         end

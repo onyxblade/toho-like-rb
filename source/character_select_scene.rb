@@ -12,7 +12,7 @@ class CharacterSelectScene
     elsif Gosu::button_down? Gosu::KbLeft
       @selected = 'reimu'
     elsif Gosu::button_down? Gosu::KbZ
-      battle_scene = BattleScene.new
+      battle_scene = BattleScene.new(@selected)
       BattleScene.instance = battle_scene
       GameWindow.instance.scene = battle_scene
     end

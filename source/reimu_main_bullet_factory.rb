@@ -14,19 +14,40 @@ class ReimuMainBulletFactory < BulletFactory
     position = Vector[position[0], position[1]-5]
     case @level
     when 1
-      [ReimuBullet1.new(position, @velocity)]
+      [
+        ReimuBullet1.new do
+          start_by position: position,
+                   velocity: @velocity
+        end
+      ]
     when 2
       seperation = @slow ? 0.35 : 1
       [
-        ReimuBullet1.new(Vector[position[0]-3, position[1]], Vector[-seperation, -25].normalize * @speed),
-        ReimuBullet1.new(Vector[position[0]+3, position[1]], Vector[seperation, -25].normalize * @speed)
+        ReimuBullet1.new do
+          start_by position: Vector[position[0]-3, position[1]],
+                   velocity: Vector[-seperation, -25]
+        end,
+        ReimuBullet1.new do
+          start_by position: Vector[position[0]+3, position[1]],
+                   velocity: Vector[seperation, -25]
+        end
       ]
     when 3
       seperation = @slow ? 0.7 : 2
       [
-        ReimuBullet1.new(Vector[position[0]-3, position[1]], Vector[-seperation, -25].normalize * @speed),
-        ReimuBullet1.new(Vector[position[0]+3, position[1]],Vector[seperation, -25].normalize * @speed),
-        ReimuBullet1.new(position, Vector[0, -25].normalize * @speed)
+        ReimuBullet1.new do
+          start_by position: Vector[position[0]-3, position[1]],
+                   velocity: Vector[-seperation, -25]
+        end,
+        ReimuBullet1.new do
+          start_by position: Vector[position[0]+3, position[1]],
+                   velocity: Vector[seperation, -25]
+
+        end,
+        ReimuBullet1.new do
+          start_by position: Vector[position[0], position[1]],
+                   velocity: Vector[0, -25]
+        end
       ]
     end
   end
