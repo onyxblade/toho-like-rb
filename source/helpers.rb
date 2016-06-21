@@ -19,11 +19,6 @@ module Helpers
   def graze? cb1, cb2, radius
     (cb1[0] - cb2[0]).r < cb1[1] + cb2[1] + radius
   end
-
-  def wait_in_enum second, enum
-    frames = (second * 60).to_i
-    frames.times{ enum.yield nil }
-  end
 end
 
 module Math
@@ -51,6 +46,13 @@ class Vector
       end
     end
   end
+
+  module PatchNormalize
+    def normalize
+      r == 0 ? self : super
+    end
+  end
+  prepend PatchNormalize
 
 end
 

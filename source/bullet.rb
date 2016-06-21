@@ -1,20 +1,25 @@
 class Bullet
   attr_accessor :position, :alive, :demage
+  include Behavior
+
   def initialize
     @alive = true
 
     @tracing = false
     @position = Vector[0, 0]
-    @speed = 1
+    @speed = 0
     @acceleration = 0
-    @turning_speed = 1
+    @turning_speed = 0
     @turning_acceleration = 0
+    @velocity = Vector[0, 0]
+    @turning_direction = Vector[0, 0]
 
     initialize_sprite
   end
 
   def update
-    apply_behavior
+    @behavior.next
+
     update_velocity
     update_position
 
@@ -64,9 +69,5 @@ class Bullet
   def hitted _
     @alive = false
     #battle_scene.effects << ShockWave.new(*@position)
-  end
-
-  def apply_behavior
-    @behavior.next&.each{|key, value| instance_variable_set("@#{key}", value)}
   end
 end

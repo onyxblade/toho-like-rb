@@ -1,4 +1,4 @@
-class Yousei4 < Enemy
+class Enemy4 < Enemy
   class << self
     attr_accessor :images
   end

@@ -16,37 +16,37 @@ class ReimuMainBulletFactory < BulletFactory
     when 1
       [
         ReimuBullet1.new do
-          start_by position: position,
-                   velocity: @velocity
+          set position: position,
+              velocity: @velocity
         end
       ]
     when 2
       seperation = @slow ? 0.35 : 1
       [
         ReimuBullet1.new do
-          start_by position: Vector[position[0]-3, position[1]],
-                   velocity: Vector[-seperation, -25]
+          set position: Vector[position[0]-3, position[1]],
+              velocity: Vector[-seperation, -25]
         end,
         ReimuBullet1.new do
-          start_by position: Vector[position[0]+3, position[1]],
-                   velocity: Vector[seperation, -25]
+          set position: Vector[position[0]+3, position[1]],
+              velocity: Vector[seperation, -25]
         end
       ]
     when 3
       seperation = @slow ? 0.7 : 2
       [
         ReimuBullet1.new do
-          start_by position: Vector[position[0]-3, position[1]],
-                   velocity: Vector[-seperation, -25]
+          set position: Vector[position[0]-3, position[1]],
+              velocity: Vector[-seperation, -25]
         end,
         ReimuBullet1.new do
-          start_by position: Vector[position[0]+3, position[1]],
-                   velocity: Vector[seperation, -25]
+          set position: Vector[position[0]+3, position[1]],
+              velocity: Vector[seperation, -25]
 
         end,
         ReimuBullet1.new do
-          start_by position: Vector[position[0], position[1]],
-                   velocity: Vector[0, -25]
+          set position: Vector[position[0], position[1]],
+              velocity: Vector[0, -25]
         end
       ]
     end

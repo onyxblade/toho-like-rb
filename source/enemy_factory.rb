@@ -1,5 +1,6 @@
 class EnemyFactory
-  def initialize enum
+  def initialize block
+    @behavior = EnemyFactory
     @enum = enum
   end
 

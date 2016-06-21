@@ -1,13 +1,14 @@
-class Yousei1 < Enemy
+class Enemy1 < Enemy
   class << self
     attr_accessor :images
   end
 
   ANIMATE_SPEED = 8
 
-  def initialize
+  def initialize &block
     super()
     initialize_sprite
+    initialize_behavior &block
 
     @hp = 20
   end
@@ -27,12 +28,8 @@ class Yousei1 < Enemy
     @height = 30
   end
 
-  def update
-
-  end
-
   def draw
     @image = @animation.next
-    @image.draw(300, 300, 1)
+    @image.draw(*@position, 1)
   end
 end

@@ -23,10 +23,12 @@ class BattleScene
       @player = MarisaPlayer.new @battle_area
     end
 
-    @enemies << Yousei4.new(Vector[300,300])
-    @enemies << Yousei4.new(Vector[500,300])
+    @enemies << Enemy4.new(Vector[300,300])
+    @enemies << Enemy4.new(Vector[500,300])
 
     @font = Gosu::Font.new(20)
+
+    @stage = Stage1.new
 
   end
 
@@ -46,6 +48,7 @@ class BattleScene
     @items.map &:alive?
     @items.map &:update
 
+    @stage.update
   end
 
   def draw
@@ -88,5 +91,10 @@ class BattleScene
     else
       @enemy_bullets << bullet
     end
+  end
+
+  def add_enemy type, &block
+    class_name = type.to_s.split('_').map(&:capitalize).join
+    @enemies << Module.const_get(class_name).new(&block)
   end
 end

@@ -1,10 +1,10 @@
 class Enemy
 
   attr_accessor :position
+  include Behavior
 
   def initialize
     @alive = true
-    @behavior = Enumerator.new {|enum| loop{ enum.yield }}
   end
 
   def alive?
@@ -20,12 +20,22 @@ class Enemy
   end
 
   def update
-    apply_behavior
+    @behavior.next
+
+    update_velocity
+    update_position
+  end
+
+  def update_velocity
 
   end
 
-  def apply_behavior
-    @behavior.next&.each{|key, value| instance_variable_set("@#{key}", value)}
+  def update_position
+    @position += @velocity
+  end
+
+  def collision_body
+    [@position, @width/2]
   end
 
 end
