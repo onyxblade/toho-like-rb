@@ -20,7 +20,7 @@ module Behavior
   end
 
   def wait_for &block
-    @yielder.yield nil if !instance_eval(&block)
+    @yielder.yield nil until instance_eval(&block)
   end
 
   def add_bullet *args, &block

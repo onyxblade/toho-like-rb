@@ -30,6 +30,6 @@ class Enemy1 < Enemy
 
   def draw
     @image = @animation.next
-    @image.draw(*@position, 1)
+    @image.draw_rot(*@position, 1, 0)
   end
 end

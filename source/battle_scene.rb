@@ -91,10 +91,13 @@ class BattleScene
     else
       @enemy_bullets << bullet
     end
+    bullet
   end
 
   def add_enemy type, &block
     class_name = type.to_s.split('_').map(&:capitalize).join
-    @enemies << Module.const_get(class_name).new(&block)
+    enemy = Module.const_get(class_name).new(&block)
+    @enemies << enemy
+    enemy
   end
 end

@@ -1,17 +1,19 @@
 
 class Stage1 < Stage
   def drama
-    six_enemy_1_group Vector[50, -10], :left, false
-    wait 3
-    six_enemy_1_group Vector[450, -10], :right, false
+    #finished = six_enemy_1_group Vector[battle_area.x1 + 50, -10], :left, false
+    #wait_for &finished
+    six_enemy_1_group Vector[battle_area.x2 - 50, -10], :right, false
   end
 
   def six_enemy_1_group begin_position, direction, will_fire = false
     cursor = begin_position
-    6.times.map do |i|
-      add_enemy :enemy_1 do
+    enemies = []
+    6.times do
+      enemy = add_enemy :enemy_1 do
         set position: cursor,
-            velocity: Vector[0, 1.8]
+            velocity: Vector[0, 1.8],
+            speed: 1.5
 
         wait 2.5
 
@@ -22,12 +24,25 @@ class Stage1 < Stage
               Vector[0.5, 1]
             end
 
-        set velocity: v
+        t = case direction
+            when :left
+              Vector[@position.x - 200, @position.y + 100]
+            when :right
+              Vector[@position.x + 200, @position.y + 100]
+            end
 
+        set velocity: v,
+            tracing: true,
+            target_position: t,
+            turning_speed: 0
+
+        p @turning_speed
         if will_fire
 
         end
       end
+
+      enemies << enemy
 
       cursor =  case direction
                 when :left
@@ -37,5 +52,6 @@ class Stage1 < Stage
                 end
       wait 0.3
     end
+    proc {enemies.all?{|x| !x.alive?}}
   end
 end
