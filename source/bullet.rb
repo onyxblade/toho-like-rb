@@ -54,7 +54,7 @@ class Bullet
       @turning_velocity = @turning_direction * @turning_speed
       @velocity = (@velocity.normalize + @turning_velocity.normalize) * @speed
     else
-      @velocity = @velocity.normalize * @speed
+      @velocity = @velocity + @acceleration
     end
   end
 

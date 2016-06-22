@@ -17,6 +17,7 @@ module Helpers
   end
 
   def graze? cb1, cb2, radius
+    p cb1, cb2
     (cb1[0] - cb2[0]).r < cb1[1] + cb2[1] + radius
   end
 end

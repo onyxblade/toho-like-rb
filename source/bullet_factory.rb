@@ -12,7 +12,7 @@ class BulletFactory
 
   def process_fire
     if @cool_down.zero?
-      create_bullet.each{|x| battle_scene.add_bullet x, :player}
+      create_bullet.each{|x| battle_scene.add_player_bullet x, :player}
       @cool_down = @interval
     end
   end

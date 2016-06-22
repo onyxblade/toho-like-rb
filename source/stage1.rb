@@ -1,48 +1,54 @@
 
 class Stage1 < Stage
   def drama
-    #finished = six_enemy_1_group Vector[battle_area.x1 + 50, -10], :left, false
-    #wait_for &finished
-    six_enemy_1_group Vector[battle_area.x2 - 50, -10], :right, false
+
+    #six_enemy_1_group Vector[battle_area.x1 + 70, -10], :left, false
+    #wait 3
+    #six_enemy_1_group Vector[battle_area.x2 - 70, -10], :right, false
+    #wait 3
+    #six_enemy_1_group Vector[battle_area.x1 + 70, -10], :left, false
+    #wait 3
+    #six_enemy_1_group Vector[battle_area.x2 - 70, -10], :right, false
+    #wait 3
+
+    cursor = Vector[300, -20]
+
+    add_enemy :enemy_1 do
+      set position: cursor,
+          velocity: Vector[0, 1.8]
+
+      wait 1
+      set velocity: Vector[0, 0]
+      wait 0.5
+
+      sector_bullets @position
+
+      wait 0.5
+      set velocity: Vector[0, 1.8],
+          acceleration: Vector[-0.03, -0.05]
+      wait 1
+      set acceleration: Vector[0, 0]
+    end
   end
 
   def six_enemy_1_group begin_position, direction, will_fire = false
     cursor = begin_position
-    enemies = []
     6.times do
-      enemy = add_enemy :enemy_1 do
+      add_enemy :enemy_1 do
         set position: cursor,
             velocity: Vector[0, 1.8],
             speed: 1.5
 
         wait 2.5
 
-        v = case direction
-            when :left
-              Vector[-0.5, 1]
-            when :right
-              Vector[0.5, 1]
-            end
+        set acceleration: case direction
+                          when :left
+                            Vector[-0.03, 0]
+                          when :right
+                            Vector[0.03, 0]
+                          end
 
-        t = case direction
-            when :left
-              Vector[@position.x - 200, @position.y + 100]
-            when :right
-              Vector[@position.x + 200, @position.y + 100]
-            end
-
-        set velocity: v,
-            tracing: true,
-            target_position: t,
-            turning_speed: 0
-
-        p @turning_speed
-        if will_fire
-
-        end
       end
-
-      enemies << enemy
 
       cursor =  case direction
                 when :left
@@ -52,6 +58,20 @@ class Stage1 < Stage
                 end
       wait 0.3
     end
-    proc {enemies.all?{|x| !x.alive?}}
   end
+
+  def create_sector_bullets position
+    6.times.each do |i|
+      a = 52.5 + i*15
+      add_bullet :enemy_bullet_1 do
+        set position: position,
+            velocity: Vector[Math.cos(Math.rad(a)), Math.sin(Math.rad(a))].normalize * 3
+
+        within 1 do
+          boost_velocity -0.01
+        end
+      end
+    end
+  end
+
 end

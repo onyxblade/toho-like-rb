@@ -31,4 +31,14 @@ module Behavior
     battle_scene.add_enemy *args, &block
   end
 
+  def within second
+    frames = (second * 60).to_i
+    frames.times{ @yielder.yield yield }
+  end
+
+  def boost_velocity diff
+    v = @velocity
+    set velocity: (v.normalize * (v.r + diff))
+  end
+
 end

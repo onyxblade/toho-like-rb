@@ -6,14 +6,9 @@ class Enemy
   def initialize
     @alive = true
 
-    @tracing = false
     @position = Vector[0, 0]
-    @speed = 0
-    @acceleration = 0
-    @turning_speed = 0
-    @turning_acceleration = 0
+    @acceleration = Vector[0, 0]
     @velocity = Vector[0, 0]
-    @turning_direction = Vector[0, 0]
   end
 
   def alive?
@@ -37,18 +32,14 @@ class Enemy
 
     update_velocity
     update_position
+
+    if out_of_area?
+      @alive = false
+    end
   end
 
   def update_velocity
-    @speed += @acceleration
-    if tracing?
-      @turning_direction = @target_position - @position
-      @turning_speed += @turning_acceleration
-      @turning_velocity = @turning_direction.normalize * @turning_speed
-      @velocity = (@velocity + @turning_velocity).normalize * @speed
-    else
-      @velocity = @velocity.normalize * @speed
-    end
+    @velocity += @acceleration
   end
 
   def update_position
@@ -57,6 +48,15 @@ class Enemy
 
   def collision_body
     [@position, @width/2]
+  end
+
+  def out_of_area?
+    @dead_distance ||= [@height, @width].max
+
+    battle_area.x1 - @position.x > @dead_distance ||
+    battle_area.x2 - @position.x < -@dead_distance ||
+    battle_area.y1 - @position.y > @dead_distance ||
+    battle_area.y2 - @position.y < -@dead_distance
   end
 
 end

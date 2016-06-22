@@ -53,15 +53,15 @@ class BattleScene
 
   def draw
     Gosu.draw_rect(*@battle_area[0], *@battle_area[1], Gosu::Color::WHITE)
-    Gosu.draw_rect(*@score_area[0], *@score_area[1], Gosu::Color::BLACK)
+    Gosu.draw_rect(*@score_area[0], *@score_area[1], Gosu::Color::BLACK, 100)
     @player.draw
     @player_bullets.map &:draw
     @enemies.map &:draw
     @enemy_bullets.map &:draw
     @effects.map &:draw
     @items.map &:draw
-    @font.draw("Bullets: #{@player_bullets.count + @enemy_bullets.count}", *@score_area.relative(10, 10), 1, 1.0, 1.0, 0xff_ffffff)
-    @font.draw("FPS: #{Gosu.fps}", *@score_area.relative(10, 30), 1, 1.0, 1.0, 0xff_ffffff)
+    @font.draw("Bullets: #{@player_bullets.count + @enemy_bullets.count}", *@score_area.relative(10, 10), 101, 1.0, 1.0, 0xff_ffffff)
+    @font.draw("FPS: #{Gosu.fps}", *@score_area.relative(10, 30), 101, 1.0, 1.0, 0xff_ffffff)
   end
 
   def process_collisions
@@ -75,22 +75,29 @@ class BattleScene
     end
 
     @enemy_bullets.each do |bullet|
-      if graze? @player, bullet, 0.5
-        @player.graze bullet
-      end
+      #if graze? @player, bullet, 0.5
+      #  @player.graze bullet
+      #end
 
-      if collision? @player, bullet
-        @player.hitted_by bullet
-      end
+      #if collision? @player, bullet
+      #  @player.hitted_by bullet
+      #end
     end
   end
 
-  def add_bullet bullet, from
+  def add_player_bullet bullet, from = :enemy
     if from == :player
       @player_bullets << bullet
     else
       @enemy_bullets << bullet
     end
+    bullet
+  end
+
+  def add_bullet type, &block
+    class_name = type.to_s.split('_').map(&:capitalize).join
+    bullet = Module.const_get(class_name).new(&block)
+    @enemy_bullets << bullet
     bullet
   end
 
