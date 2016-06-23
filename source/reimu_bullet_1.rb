@@ -10,7 +10,6 @@ class ReimuBullet1 < Bullet
     @speed = 25
     @demage = 10
 
-    initialize_behavior &block
   end
 
   def initialize_sprite

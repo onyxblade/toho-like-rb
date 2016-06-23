@@ -1,5 +1,5 @@
 class Stage
-  include Behavior
+  include FlowControl
 
   def initialize
     @drama = Enumerator.new do |yielder|

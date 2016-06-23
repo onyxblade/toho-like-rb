@@ -15,7 +15,6 @@ class ReimuBullet2 < Bullet
     @demage = 25
     @acceleration = 0
     @turning_speed = 1
-    initialize_behavior{}
   end
 
   def initialize_sprite

@@ -1,6 +1,6 @@
 class BattleScene
 
-  attr_accessor :battle_area, :score_area, :player_bullets, :enemies, :enemy_bullets, :effects, :items
+  attr_accessor :battle_area, :score_area, :player_bullets, :enemies, :enemy_bullets, :effects, :items, :workers
 
   class << self
     attr_accessor :instance
@@ -12,6 +12,7 @@ class BattleScene
     @enemies = []
     @effects = []
     @items = []
+    @workers = []
 
     @battle_area = Rect[[0,0], [550,600]]
     @score_area = Rect[[550,0], [800,600]]
@@ -47,6 +48,7 @@ class BattleScene
     @effects.map &:update
     @items.map &:alive?
     @items.map &:update
+    @workers.map &:next
 
     @stage.update
   end
@@ -79,9 +81,9 @@ class BattleScene
       #  @player.graze bullet
       #end
 
-      #if collision? @player, bullet
-      #  @player.hitted_by bullet
-      #end
+      if collision? @player.collision_body, bullet.collision_body
+        @player.hitted_by bullet
+      end
     end
   end
 
@@ -106,5 +108,9 @@ class BattleScene
     enemy = Module.const_get(class_name).new(&block)
     @enemies << enemy
     enemy
+  end
+
+  def add_worker &block
+    Enumerator.new &block
   end
 end

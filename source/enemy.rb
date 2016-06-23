@@ -1,7 +1,8 @@
 class Enemy
 
   attr_accessor :position
-  include Behavior
+  prepend Behavior
+  include Moveable
 
   def initialize
     @alive = true
@@ -28,8 +29,6 @@ class Enemy
   end
 
   def update
-    @behavior.next
-
     update_velocity
     update_position
 

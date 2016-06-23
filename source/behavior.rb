@@ -1,4 +1,15 @@
 module Behavior
+  include ::FlowControl
+
+  def initialize *arg, &block
+    super(*arg, &block)
+    if block_given?
+      initialize_behavior &block
+    else
+      initialize_behavior {}
+    end
+  end
+
   def initialize_behavior &block
     @behavior = Enumerator.new do |yielder|
       @yielder = yielder
@@ -10,35 +21,13 @@ module Behavior
     @behavior.next
   end
 
+  def update
+    @behavior.next
+    super
+  end
+
   def set hash = {}
     hash.each{|key, value| instance_variable_set("@#{key}", value)}
-  end
-
-  def wait second
-    frames = (second * 60).to_i
-    frames.times{ @yielder.yield nil }
-  end
-
-  def wait_for &block
-    @yielder.yield nil until instance_eval(&block)
-  end
-
-  def add_bullet *args, &block
-    battle_scene.add_bullet *args, &block
-  end
-
-  def add_enemy *args, &block
-    battle_scene.add_enemy *args, &block
-  end
-
-  def within second
-    frames = (second * 60).to_i
-    frames.times{ @yielder.yield yield }
-  end
-
-  def boost_velocity diff
-    v = @velocity
-    set velocity: (v.normalize * (v.r + diff))
   end
 
 end

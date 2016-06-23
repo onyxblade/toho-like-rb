@@ -1,8 +1,9 @@
 class Bullet
   attr_accessor :position, :alive, :demage
-  include Behavior
+  prepend Behavior
+  include Moveable
 
-  def initialize
+  def initialize &block
     @alive = true
 
     @tracing = false
@@ -18,8 +19,6 @@ class Bullet
   end
 
   def update
-    @behavior.next
-
     update_velocity
     update_position
 
@@ -54,7 +53,7 @@ class Bullet
       @turning_velocity = @turning_direction * @turning_speed
       @velocity = (@velocity.normalize + @turning_velocity.normalize) * @speed
     else
-      @velocity = @velocity + @acceleration
+      @velocity = @velocity.normalize * @speed
     end
   end
 

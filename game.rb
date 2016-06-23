@@ -1,5 +1,6 @@
 require 'gosu'
 require 'matrix'
+require 'pry'
 
 require './source/helpers'
 
@@ -32,11 +33,22 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    @scene.update
+    log_time :update do
+      @scene.update
+    end
   end
 
   def draw
-    @scene.draw
+    log_time :draw do
+      @scene.draw
+    end
+  end
+
+  def log_time name
+    time = Time.now.to_f
+    yield
+    elapsed = (Time.now.to_f - time) * 1000
+    #p [name, elapsed]
   end
 end
 

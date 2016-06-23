@@ -6,9 +6,8 @@ class Enemy1 < Enemy
   ANIMATE_SPEED = 8
 
   def initialize &block
-    super()
+    super(&block)
     initialize_sprite
-    initialize_behavior &block
 
     @hp = 20
   end

@@ -154,4 +154,12 @@ class Player
   def calc_actual_position canvas_position
     Vector[canvas_position[0] + @width / 2, canvas_position[1] + @height / 2]
   end
+
+  def collision_body
+    [@position, 3]
+  end
+
+  def go_die
+
+  end
 end

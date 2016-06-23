@@ -4,9 +4,8 @@ class EnemyBullet1 < NewBullet
   end
 
   def initialize &block
-    super()
+    super(&block)
     initialize_sprite
-    initialize_behavior &block
   end
 
   def initialize_sprite
@@ -20,6 +19,6 @@ class EnemyBullet1 < NewBullet
   end
 
   def collision_body
-    [@position, 0]
+    [@position, 8]
   end
 end
