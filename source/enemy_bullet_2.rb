@@ -1,17 +1,18 @@
-class EnemyBullet1 < NewBullet
+class EnemyBullet2 < NewBullet
   class << self
     attr_accessor :image
   end
 
-  def initialize params={}, &block
+  def initialize params = {}, &block
     super(params, &block)
     initialize_sprite
+
     set params
   end
 
   def initialize_sprite
-    self.class.image ||= Gosu::Image.new('image/bullet.png', rect: [128, 48, 16, 16])
-    @width = 16
+    self.class.image ||= Gosu::Image.new('image/bullet.png', rect: [212, 96, 8, 16])
+    @width = 8
     @height = 16
   end
 
@@ -20,6 +21,6 @@ class EnemyBullet1 < NewBullet
   end
 
   def collision_body
-    [@position, 8]
+    [@position, 4]
   end
 end

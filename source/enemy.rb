@@ -4,12 +4,14 @@ class Enemy
   prepend Behavior
   include Moveable
 
-  def initialize
+  def initialize params = {}
     @alive = true
 
     @position = Vector[0, 0]
     @acceleration = Vector[0, 0]
     @velocity = Vector[0, 0]
+
+    @@dead_se ||= Gosu::Sample.new('SE/enemy_vanish.wav')
   end
 
   def alive?
@@ -24,6 +26,7 @@ class Enemy
     @hp -= bullet.demage
     if @hp < 0
       @alive = false
+      @@dead_se.play
       battle_scene.effects << ShockWave.new(@position)
     end
   end

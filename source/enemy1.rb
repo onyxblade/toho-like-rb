@@ -5,7 +5,7 @@ class Enemy1 < Enemy
 
   ANIMATE_SPEED = 8
 
-  def initialize &block
+  def initialize params = {}, &block
     super(&block)
     initialize_sprite
 

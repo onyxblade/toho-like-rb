@@ -1,6 +1,6 @@
 class BattleScene
 
-  attr_accessor :battle_area, :score_area, :player_bullets, :enemies, :enemy_bullets, :effects, :items, :workers
+  attr_accessor :battle_area, :score_area, :player_bullets, :enemies, :enemy_bullets, :effects, :items, :presenters, :boss
 
   class << self
     attr_accessor :instance
@@ -12,7 +12,8 @@ class BattleScene
     @enemies = []
     @effects = []
     @items = []
-    @workers = []
+    @presenters = []
+    @boss = nil
 
     @battle_area = Rect[[0,0], [550,600]]
     @score_area = Rect[[550,0], [800,600]]
@@ -30,7 +31,7 @@ class BattleScene
     @font = Gosu::Font.new(20)
 
     @stage = Stage1.new
-
+    #@items << Item.new(:power, Vector[100, 100])
   end
 
   def update
@@ -46,11 +47,13 @@ class BattleScene
     @enemy_bullets.map &:update
     @effects.select! &:alive?
     @effects.map &:update
-    @items.map &:alive?
+    @items.select! &:alive?
     @items.map &:update
-    @workers.map &:next
+    @presenters.select! &:alive?
+    @presenters.map &:update
 
     @stage.update
+    @boss&.update
   end
 
   def draw
@@ -64,6 +67,7 @@ class BattleScene
     @items.map &:draw
     @font.draw("Bullets: #{@player_bullets.count + @enemy_bullets.count}", *@score_area.relative(10, 10), 101, 1.0, 1.0, 0xff_ffffff)
     @font.draw("FPS: #{Gosu.fps}", *@score_area.relative(10, 30), 101, 1.0, 1.0, 0xff_ffffff)
+    @boss&.draw
   end
 
   def process_collisions
@@ -76,13 +80,20 @@ class BattleScene
       end
     end
 
+    @items.each do |item|
+      if item.alive? && collision?(@player.collision_body, item.collision_body)
+        item.picked_by @player
+      end
+    end
+
     @enemy_bullets.each do |bullet|
       #if graze? @player, bullet, 0.5
       #  @player.graze bullet
       #end
 
-      if collision? @player.collision_body, bullet.collision_body
+      if !@player.ghost? && bullet.alive? && collision?(@player.collision_body, bullet.collision_body)
         @player.hitted_by bullet
+        bullet.hitted @player
       end
     end
   end
@@ -96,21 +107,21 @@ class BattleScene
     bullet
   end
 
-  def add_bullet type, &block
+  def add_bullet type, params={}, &block
     class_name = type.to_s.split('_').map(&:capitalize).join
-    bullet = Module.const_get(class_name).new(&block)
+    bullet = Module.const_get(class_name).new(params, &block)
     @enemy_bullets << bullet
     bullet
   end
 
-  def add_enemy type, &block
+  def add_enemy type, params={}, &block
     class_name = type.to_s.split('_').map(&:capitalize).join
-    enemy = Module.const_get(class_name).new(&block)
+    enemy = Module.const_get(class_name).new(params, &block)
     @enemies << enemy
     enemy
   end
 
-  def add_worker &block
-    Enumerator.new &block
+  def add_presenter &block
+    @presenters << Presenter.new(&block)
   end
 end

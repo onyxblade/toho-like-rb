@@ -3,10 +3,15 @@ class ShockWave
     attr_accessor :image
   end
 
-  def initialize position
+  def initialize position, style = nil
     self.class.image ||= Gosu::Image.new('image/shockwave.png')
     @position = position
-    @scale_enumerator = (0..0.7).step(1.0 / 8)
+    case style
+    when :player
+      @scale_enumerator = (0..0.7).step(1.0 / 8)
+    else
+      @scale_enumerator = (0..0.7).step(1.0 / 8)
+    end
     @scale = @scale_enumerator.next
     @alive = true
   end

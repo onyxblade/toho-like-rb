@@ -20,6 +20,14 @@ module Helpers
     p cb1, cb2
     (cb1[0] - cb2[0]).r < cb1[1] + cb2[1] + radius
   end
+
+  def behaviors
+    Behavior::Generators
+  end
+
+  def angle_to_vector a
+    Vector[Math.cos(Math.rad(a)), Math.sin(Math.rad(a))].normalize
+  end
 end
 
 module Math

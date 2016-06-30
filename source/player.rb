@@ -9,10 +9,13 @@ class Player
   def initialize character, battle_area
     initialize_sprite character
 
+    @ghost = false
+    @ghost_timer = 0
     @moveable_area = battle_area
-    @position = Vector[270, 576]
+    @position = Vector[270, 500]
     @speed = @normal_speed
 
+    @dead_se = Gosu::Sample.new('SE/dead.wav')
   end
 
   def initialize_sprite character
@@ -65,6 +68,10 @@ class Player
   end
 
   def update
+    if @ghost_timer > 0
+      @ghost_timer -= 1
+    end
+    @ghost = false if @ghost_timer == 0 && @ghost == true
     update_speed
     process_move
     @bullet_factories.map &:update
@@ -74,7 +81,15 @@ class Player
   def draw
     draw_indicator *@position
     image = @animation.next
-    image.draw(*canvas_position, 0)
+    if ghost?
+      if @ghost_timer.odd?
+        image.draw_rot(*@position, 0, 0, 0.5, 0.3, 1, 1, 0x77ffffff)
+      else
+        image.draw_rot(*@position, 0, 0, 0.5, 0.3, 1, 1, 0xffffffff)
+      end
+    else
+      image.draw_rot(*@position, 0, 0, 0.5, 0.3, 1, 1, 0xffffffff )
+    end
     @bullet_factories.map &:draw
   end
 
@@ -160,6 +175,18 @@ class Player
   end
 
   def go_die
+    @ghost = true
+    @ghost_timer = 120
+    @position = Vector[270, 500]
+    @dead_se.play
+    battle_scene.effects << ShockWave.new(@position, :player)
+  end
 
+  def ghost?
+    @ghost
+  end
+
+  def hitted_by _
+    go_die
   end
 end

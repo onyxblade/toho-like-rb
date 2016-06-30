@@ -1,27 +1,53 @@
 
 class Stage1 < Stage
+  include DanmukuHelpers
   def drama
     stage = self
 
     #six_enemy_1_group Vector[battle_area.x1 + 70, -10], :left, false
-    #wait 3
+=begin
+    stage.vector_iter :-, [battle_area.x1 + 70, -10], 6, [-20, 0] do |cursor|
+      battle_scene.add_enemy :enemy_1 do
+        set position: cursor,
+            velocity: Vector[0, 1.8],
+            speed: 1.5
+
+        wait 2.5
+
+        set acceleration: case direction
+                          when :left
+                            Vector[-0.03, 0]
+                          when :right
+                            Vector[0.03, 0]
+                          end
+
+      end
+    end
+=end
+    #wait 1
     #six_enemy_1_group Vector[battle_area.x2 - 70, -10], :right, false
-    #wait 3
+    #wait 1
     #six_enemy_1_group Vector[battle_area.x1 + 70, -10], :left, false
     #wait 3
     #six_enemy_1_group Vector[battle_area.x2 - 70, -10], :right, false
     #wait 3
-    battle_scene.add_worker do
-      stage.cursor_sequence [100, -20], [100, 0], 5 do |cursor|
+begin
+    battle_scene.add_presenter do
+      stage.vector_iter :+, [100,-20], 5, [100,0] do |cursor|
         battle_scene.add_enemy :enemy_1 do
           set position: cursor,
-              velocity: Vector[0, 1.8]
+              velocity: Vector[0, 3]
 
           wait 1
           set velocity: Vector[0, 0]
           wait 0.5
 
-          stage.create_sector_bullets @position
+          stage.sector_iter 52.5, 90, 6 do |a|
+            battle_scene.add_bullet :enemy_bullet_1,
+                                    position: @position,
+                                    velocity: Vector[Math.cos(Math.rad(a)), Math.sin(Math.rad(a))].normalize * 3,
+                                    &behaviors.to_be_decelerate(0, -0.01, 1)
+          end
 
           wait 0.5
           set velocity: Vector[0, 1.8],
@@ -33,7 +59,7 @@ class Stage1 < Stage
       end
     end
 
-    stage.cursor_sequence [50, -10], [100, 0], 5 do |cursor|
+    stage.vector_iter :+, [50, -10], 5, [100, 0] do |cursor|
       battle_scene.add_enemy :enemy_1 do
         set position: cursor,
             velocity: Vector[0, 1.8]
@@ -42,7 +68,12 @@ class Stage1 < Stage
         set velocity: Vector[0, 0]
         wait 0.5
 
-        stage.create_sector_bullets @position
+        stage.sector_iter 52.5, 90, 6 do |a|
+          battle_scene.add_bullet :enemy_bullet_1,
+                                  position: @position,
+                                  velocity: Vector[Math.cos(Math.rad(a)), Math.sin(Math.rad(a))].normalize * 3,
+                                  &behaviors.to_be_decelerate(0, -0.01, 1)
+        end
 
         wait 0.5
         set velocity: Vector[0, 1.8],
@@ -52,6 +83,9 @@ class Stage1 < Stage
       end
       wait 0.3
     end
+end
+    stage.perform_rumia
+    wait_for { battle_scene.boss }
   end
 
   def six_enemy_1_group begin_position, direction, will_fire = false
@@ -83,33 +117,45 @@ class Stage1 < Stage
     end
   end
 
-  def create_sector_bullets position
-    6.times.each do |i|
-      a = 52.5 + i*15
-      battle_scene.add_bullet :enemy_bullet_1 do
-        set position: position,
-            velocity: Vector[Math.cos(Math.rad(a)), Math.sin(Math.rad(a))].normalize * 3
-
-        within 1 do
-          boost_velocity -0.01
-        end
-      end
-    end
-  end
-
-  def cursor_sequence cursor, increment, times
-    cursor = Vector[*cursor]
-    increment = Vector[*increment]
-
+  def iter type, from, times, increment
     times.times do
-      yield cursor
-      cursor += increment
+      yield from
+      from = from.send(type, increment)
     end
   end
 
-  def add_worker &block
-    battle_scene.workers << Enumerator.new do |enum|
-      enum
+  def vector_iter type, from, times, increment, &block
+    iter type, Vector[*from], times, Vector[*increment], &block
+  end
+
+  def sector_iter start, total, step
+    per_step = total / step
+    step.times do |i|
+      a = start + i*per_step
+      yield a
+    end
+  end
+
+  def perform_rumia
+    stage = self
+    battle_scene.boss = Rumia.new do |boss|
+      set position: Vector[180, -30],
+          velocity: Vector[3, 3]
+
+      wait 0.5
+
+      set velocity: Vector[0, 0]
+
+      3.times do
+        stage.sector_iter 0, 360, 30 do |a|
+          battle_scene.add_bullet :enemy_bullet_2,
+                                  position: boss.position,
+                                  velocity: angle_to_vector(a) * 8,
+                                  &behaviors.to_be_decelerate(1, -0.2, 0.5)
+        end
+        wait 0.2
+      end
+
     end
   end
 

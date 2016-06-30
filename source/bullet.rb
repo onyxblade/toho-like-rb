@@ -3,7 +3,7 @@ class Bullet
   prepend Behavior
   include Moveable
 
-  def initialize &block
+  def initialize params={}, &block
     @alive = true
 
     @tracing = false
@@ -15,6 +15,7 @@ class Bullet
     @velocity = Vector[0, 0]
     @turning_direction = Vector[0, 0]
 
+    set params if !params.empty?
     initialize_sprite
   end
 

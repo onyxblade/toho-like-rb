@@ -1,8 +1,8 @@
 class NewBullet < Bullet
   prepend Behavior
 
-  def initialize &block
-    super(&block)
+  def initialize params = {}, &block
+    super(params, &block)
 
     @acceleration = Vector[0, 0]
     @velocity = Vector[0, 0]
