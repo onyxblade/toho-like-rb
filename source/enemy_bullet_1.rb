@@ -1,4 +1,4 @@
-class EnemyBullet1 < NewBullet
+class EnemyBullet1 < Bullet
   class << self
     attr_accessor :image
   end

@@ -138,7 +138,7 @@ end
 
   def perform_rumia
     stage = self
-    battle_scene.boss = Rumia.new do |boss|
+    battle_scene.add_enemy :rumia do |boss|
       set position: Vector[180, -30],
           velocity: Vector[3, 3]
 
@@ -146,16 +146,112 @@ end
 
       set velocity: Vector[0, 0]
 
-      3.times do
-        stage.sector_iter 0, 360, 30 do |a|
-          battle_scene.add_bullet :enemy_bullet_2,
-                                  position: boss.position,
-                                  velocity: angle_to_vector(a) * 8,
-                                  &behaviors.to_be_decelerate(1, -0.2, 0.5)
+      while @hp > 0
+        3.times do
+          stage.sector_iter 0, 360, 30 do |a|
+            battle_scene.add_bullet :enemy_bullet_2,
+                                    position: boss.position,
+                                    velocity: angle_to_vector(a) * 8,
+                                    color: :yellow,
+                                    &behaviors.to_be_decelerate(1, -0.2, 0.5)
+          end
+          wait 0.2
         end
-        wait 0.2
+        3.times do
+          stage.sector_iter 30, 360, 30 do |a|
+            battle_scene.add_bullet :enemy_bullet_2,
+                                    position: boss.position,
+                                    velocity: angle_to_vector(a) * 8,
+                                    color: :blue,
+                                    &behaviors.to_be_decelerate(1, -0.2, 0.5)
+          end
+          wait 0.2
+        end
+        break if @hp <= 0
+
+        set velocity: Vector[-3, 1]
+        wait 0.7
+        set velocity: Vector[0, 0]
+        3.times do
+          stage.sector_iter 0, 360, 30 do |a|
+            battle_scene.add_bullet :enemy_bullet_2,
+                                    position: boss.position,
+                                    velocity: angle_to_vector(a) * 8,
+                                    &behaviors.to_be_decelerate(1, -0.2, 0.5)
+          end
+          wait 0.2
+        end
+        3.times do
+          stage.sector_iter 30, 360, 30 do |a|
+            battle_scene.add_bullet :enemy_bullet_2,
+                                    position: boss.position,
+                                    velocity: angle_to_vector(a) * 8,
+                                    color: :blue,
+                                    &behaviors.to_be_decelerate(1, -0.2, 0.5)
+          end
+          wait 0.2
+        end
+        break if @hp <= 0
+
+        set velocity: Vector[3, -1]
+        wait 0.7
+        set velocity: Vector[0, 0]
+
+        3.times do
+          stage.sector_iter 0, 360, 30 do |a|
+            battle_scene.add_bullet :enemy_bullet_2,
+                                    position: boss.position,
+                                    velocity: angle_to_vector(a) * 8,
+                                    &behaviors.to_be_decelerate(1, -0.2, 0.5)
+          end
+          wait 0.2
+        end
+        3.times do
+          stage.sector_iter 30, 360, 30 do |a|
+            battle_scene.add_bullet :enemy_bullet_2,
+                                    position: boss.position,
+                                    velocity: angle_to_vector(a) * 8,
+                                    color: :blue,
+                                    &behaviors.to_be_decelerate(1, -0.2, 0.5)
+          end
+          wait 0.2
+        end
+        break if @hp <= 0
+
+        set velocity: Vector[3, 1]
+        wait 0.7
+        set velocity: Vector[0, 0]
+
+        3.times do
+          stage.sector_iter 0, 360, 30 do |a|
+            battle_scene.add_bullet :enemy_bullet_2,
+                                    position: boss.position,
+                                    velocity: angle_to_vector(a) * 8,
+                                    &behaviors.to_be_decelerate(1, -0.2, 0.5)
+          end
+          wait 0.2
+        end
+        3.times do
+          stage.sector_iter 30, 360, 30 do |a|
+            battle_scene.add_bullet :enemy_bullet_2,
+                                    position: boss.position,
+                                    velocity: angle_to_vector(a) * 8,
+                                    color: :blue,
+                                    &behaviors.to_be_decelerate(1, -0.2, 0.5)
+          end
+          wait 0.2
+        end
+        break if @hp <= 0
+
+        set velocity: Vector[-3, -1]
+        wait 0.7
+        set velocity: Vector[0, 0]
+
       end
 
+      set velocity: Vector[0, -3]
+      wait_for { @position.y < -30 }
+      set velocity: Vector[0, 0]
     end
   end
 

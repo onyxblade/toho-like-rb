@@ -4,12 +4,13 @@ class ReimuBullet1 < Bullet
     attr_accessor :image
   end
 
-  def initialize &block
-    super()
+  def initialize params = {}, &block
+    super(params, &block)
 
     @speed = 25
-    @demage = 10
+    @demage = 5
 
+    set params
   end
 
   def initialize_sprite
@@ -24,7 +25,7 @@ class ReimuBullet1 < Bullet
 
   def draw
     draw_indicator *@position
-    self.class.image.draw_rot *@position, 0, display_direction, 0.5, 0.0, 1, 1, 0x99ffffff
+    self.class.image.draw_rot *@position, 0, display_direction, 0.5, 0.0, 1, 1, 0xccffffff
   end
 
   def collision_body

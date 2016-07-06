@@ -30,8 +30,9 @@ class ReimuAssistBulletFactory < BulletFactory
     position = @position_proc.call
     position_a = Vector[position[0]+25, position[1]] # same as canvas_position (for draw_rot)
     position_b = Vector[position[0]-25, position[1]]
-    position_a = calc_assist_position position, :left
-    position_b = calc_assist_position position, :right
+    @position_a = position_a = calc_assist_position position, :left
+    @position_b = position_b = calc_assist_position position, :right
+
     self.class.image.draw_rot(*position_a, 0, @rotation_a, 0.5, 0.5, 1, 1, 0xaaffffff)
     self.class.image.draw_rot(*position_b, 0, @rotation_b, 0.5, 0.5, 1, 1, 0xaaffffff)
   end
@@ -51,8 +52,8 @@ class ReimuAssistBulletFactory < BulletFactory
   def create_bullet
     position = @position_proc.call
     [
-      ReimuBullet2.new(Vector[position[0]-3, position[1]]),
-      ReimuBullet2.new(Vector[position[0]+3, position[1]])
+      ReimuBullet2.new(@position_a),
+      ReimuBullet2.new(@position_b)
     ]
   end
 end

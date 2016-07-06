@@ -3,8 +3,10 @@ class Rumia < Boss
     super(&block)
     initialize_sprite
     @state = :normal
-    @hp = 10000
+    @hp = 1000
+    @total_hp = 1000
     @life = 3
+    update_direction
   end
 
   def initialize_sprite
@@ -32,6 +34,20 @@ class Rumia < Boss
   end
 
   def update
+    super
+    update_direction
+
+  end
+
+  def update_direction
+    case
+    when @velocity.x < 0
+      @state = :moving_left
+    when @velocity.x > 0
+      @state = :moving_right
+    else
+      @state = :normal
+    end
     case @state
     when :moving_left
       @image = @moving_left.next
@@ -40,10 +56,14 @@ class Rumia < Boss
     when :normal
       @image = @normal.next
     end
-    super
   end
 
   def draw
+    super
     @image.draw_rot(*@position, 0, 0)
+  end
+
+  def die
+
   end
 end

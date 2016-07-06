@@ -6,14 +6,9 @@ class Bullet
   def initialize params={}, &block
     @alive = true
 
-    @tracing = false
-    @position = Vector[0, 0]
-    @speed = 0
-    @acceleration = 0
-    @turning_speed = 0
-    @turning_acceleration = 0
+    @acceleration = Vector[0, 0]
     @velocity = Vector[0, 0]
-    @turning_direction = Vector[0, 0]
+    @position = Vector[0, 0]
 
     set params if !params.empty?
     initialize_sprite
@@ -33,10 +28,6 @@ class Bullet
     @alive
   end
 
-  def tracing?
-    @tracing
-  end
-
   def out_of_area?
     @dead_distance ||= [@height, @width].max
 
@@ -47,15 +38,7 @@ class Bullet
   end
 
   def update_velocity
-    @speed += @acceleration
-    if tracing?
-      @turning_direction = @target_position - @position
-      @turning_speed += @turning_acceleration
-      @turning_velocity = @turning_direction * @turning_speed
-      @velocity = (@velocity.normalize + @turning_velocity.normalize) * @speed
-    else
-      @velocity = @velocity.normalize * @speed
-    end
+    @velocity += @acceleration
   end
 
   def update_position

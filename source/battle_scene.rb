@@ -1,6 +1,6 @@
 class BattleScene
 
-  attr_accessor :battle_area, :score_area, :player_bullets, :enemies, :enemy_bullets, :effects, :items, :presenters, :boss
+  attr_accessor :battle_area, :score_area, :player_bullets, :enemies, :enemy_bullets, :effects, :items, :presenters, :boss, :background
 
   class << self
     attr_accessor :instance
@@ -30,6 +30,8 @@ class BattleScene
 
     @font = Gosu::Font.new(20)
 
+    @background = Background.new @battle_area
+
     @stage = Stage1.new
     #@items << Item.new(:power, Vector[100, 100])
   end
@@ -54,10 +56,11 @@ class BattleScene
 
     @stage.update
     @boss&.update
+    @background.update
   end
 
   def draw
-    Gosu.draw_rect(*@battle_area[0], *@battle_area[1], Gosu::Color::WHITE)
+    #Gosu.draw_rect(*@battle_area[0], *@battle_area[1], Gosu::Color::WHITE)
     Gosu.draw_rect(*@score_area[0], *@score_area[1], Gosu::Color::BLACK, 100)
     @player.draw
     @player_bullets.map &:draw
@@ -68,6 +71,7 @@ class BattleScene
     @font.draw("Bullets: #{@player_bullets.count + @enemy_bullets.count}", *@score_area.relative(10, 10), 101, 1.0, 1.0, 0xff_ffffff)
     @font.draw("FPS: #{Gosu.fps}", *@score_area.relative(10, 30), 101, 1.0, 1.0, 0xff_ffffff)
     @boss&.draw
+    @background.draw
   end
 
   def process_collisions

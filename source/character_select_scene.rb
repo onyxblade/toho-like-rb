@@ -8,7 +8,7 @@ class CharacterSelectScene
 
   def update
     if Gosu::button_down? Gosu::KbRight
-      @selected = 'marisa'
+#      @selected = 'marisa'
     elsif Gosu::button_down? Gosu::KbLeft
       @selected = 'reimu'
     elsif Gosu::button_down? Gosu::KbZ
