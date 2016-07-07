@@ -1,7 +1,7 @@
 class Player
   include Helpers
 
-  attr_accessor :pos
+  attr_accessor :pos, :retries
 
   ANIMATE_SPEED = 4
   STATE = [:moving_left, :moving_right, :normal, :slow]
@@ -14,6 +14,8 @@ class Player
     @moveable_area = battle_area
     @position = Vector[270, 500]
     @speed = @normal_speed
+
+    @retries = 0
 
     @dead_se = Gosu::Sample.new('SE/dead.wav')
   end
@@ -171,7 +173,7 @@ class Player
   end
 
   def collision_body
-    [@position, 3]
+    [@position, 1]
   end
 
   def go_die
@@ -179,6 +181,7 @@ class Player
     @ghost_timer = 120
     @position = Vector[270, 500]
     @dead_se.play
+    @retries += 1
     battle_scene.effects << ShockWave.new(@position, :player)
   end
 

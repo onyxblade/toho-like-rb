@@ -12,7 +12,7 @@ class ReimuBullet2 < Bullet
     @position = position
     @speed = 9
     @velocity = Vector[0, -1]
-    @demage = 25
+    @demage = 10
     @acceleration = 0
     @turning_speed = 1
     @turning_acceleration = 2

@@ -3,8 +3,8 @@ class Rumia < Boss
     super(&block)
     initialize_sprite
     @state = :normal
-    @hp = 1000
-    @total_hp = 1000
+    @hp = 1500
+    @total_hp = 1500
     @life = 3
     update_direction
   end
@@ -37,6 +37,11 @@ class Rumia < Boss
     super
     update_direction
 
+    if @hp < 0
+      @alive = false
+      @@dead_se.play
+      battle_scene.effects << ShockWave.new(@position)
+    end
   end
 
   def update_direction
@@ -63,7 +68,4 @@ class Rumia < Boss
     @image.draw_rot(*@position, 0, 0)
   end
 
-  def die
-
-  end
 end

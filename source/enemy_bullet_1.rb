@@ -20,6 +20,6 @@ class EnemyBullet1 < Bullet
   end
 
   def collision_body
-    [@position, 8]
+    [@position, 6]
   end
 end

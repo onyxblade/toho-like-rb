@@ -70,6 +70,7 @@ class BattleScene
     @items.map &:draw
     @font.draw("Bullets: #{@player_bullets.count + @enemy_bullets.count}", *@score_area.relative(10, 10), 101, 1.0, 1.0, 0xff_ffffff)
     @font.draw("FPS: #{Gosu.fps}", *@score_area.relative(10, 30), 101, 1.0, 1.0, 0xff_ffffff)
+    @font.draw("Retries: #{@player.retries}", *@score_area.relative(10, 50), 101, 1.0, 1.0, 0xff_ffffff)
     @boss&.draw
     @background.draw
   end
